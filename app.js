@@ -568,9 +568,8 @@ function ExecutiveSummaryPage(props) {
   var aiMixEnd = m12.aiMixPct;
   var aiMixStart = m1.aiMixPct;
 
-  // Rule of 40 (ARR growth % + FCF margin %)
+  // FCF margin (for narrative use)
   var fcfMargin = blendedMargin - 0.55;
-  var ruleOf40 = arrGrowthPct + (fcfMargin * 100);
 
   // Scenario summaries
   function getScenarioMetrics(scen) {
@@ -636,9 +635,9 @@ function ExecutiveSummaryPage(props) {
           <div className="exec-kpi-delta positive">+${arrGrowthPct.toFixed(0)}% YoY</div>
         </div>
         <div className="exec-kpi-card">
-          <div className="exec-kpi-label">Rule of 40</div>
-          <div className="exec-kpi-value">${ruleOf40.toFixed(0)}</div>
-          <div className="exec-kpi-delta ${ruleOf40 >= 40 ? 'positive' : 'negative'}">${ruleOf40 >= 40 ? 'Above threshold' : 'Below threshold'}</div>
+          <div className="exec-kpi-label">Gross Margin</div>
+          <div className="exec-kpi-value">${(blendedMargin * 100).toFixed(1)}%</div>
+          <div className="exec-kpi-delta positive">SaaS best-in-class</div>
         </div>
         <div className="exec-kpi-card">
           <div className="exec-kpi-label">Net Revenue Retention</div>
@@ -686,7 +685,7 @@ function ExecutiveSummaryPage(props) {
           </div>
           <ul className="exec-bullets">
             <li><${StatusDot} type="positive" /><span><strong>Blended gross margin at ${(blendedMargin * 100).toFixed(1)}%</strong> \u2014 remains strong because AI is under 1% of revenue; the ${(base.assumptions.baseGrossMargin * 100).toFixed(0)}% base platform margin provides a thick buffer against AI cost dilution</span></li>
-            <li><${StatusDot} type="positive" /><span><strong>Implied FCF margin of ${(fcfMargin * 100).toFixed(1)}%</strong> (gross margin minus ~55% opex) \u2014 Rule of 40 score of ${ruleOf40.toFixed(0)} places Airtable in the top tier of growth-stage SaaS, signaling both growth velocity and operational efficiency</span></li>
+            <li><${StatusDot} type="positive" /><span><strong>Implied FCF margin of ${(fcfMargin * 100).toFixed(1)}%</strong> (gross margin minus ~55% opex) \u2014 combined with ${arrGrowthPct.toFixed(0)}% ARR growth, this places Airtable in the top tier of growth-stage SaaS, signaling both growth velocity and operational efficiency</span></li>
             <li><${StatusDot} type="warning" /><span><strong>Bear case margin risk: blended margin drops to ${(bearM.margin * 100).toFixed(1)}%</strong> \u2014 if AI adoption surges to 50% with higher inference costs ($0.0026/credit vs. $0.002 base) and AI margin compresses to 45%, the 1,400bps margin hit would reduce FCF margin to ${(bearM.fcfMargin * 100).toFixed(1)}%</span></li>
           </ul>
         </div>
@@ -1605,11 +1604,7 @@ function VariancePage() {
 // PAGE 6: AI NARRATIVES
 // ============================================================
 function NarrativesPage() {
-  var narrative = "Airtable\u2019s February MRR closed at $42,380,000, beating the $41,100,000 plan by 3.1% ($1,280,000 absolute). The beat was concentrated in two sources: an Enterprise deal that slipped from January\u2019s pipeline closing in the first week of February ($131,750 incremental MRR, representing 10.3% of the total variance), and AI credit monetization which contributed $165,000 above plan. The remaining $983,250 of upside came from broad-based new logo conversion running 10bps above the 4.0% plan \u2014 a signal that the September product refresh is sustaining its conversion lift into month five.\n\nGrowth decomposition reveals a bifurcated story. New logo MRR ($1,720,000) and AI MRR ($1,145,000, +16.8% vs. plan) are the heroes \u2014 AI adoption hit 36.2% of paid users versus the 30% plan, driven by the Airtable AI automation launch gaining organic traction. The risk sits in Business tier seat expansion, which decelerated to 3.8% monthly in January from the 5.0% plan assumption, concentrated in sub-6-month cohorts. This is an activation quality issue, not a product-market fit problem: Enterprise seat expansion held at 7.9% (vs. 8.0% plan). If Business expansion doesn\u2019t recover to 4.5%+ by April, trailing NRR will compress approximately 300bps, reducing expansion MRR by $180,000\u2013$240,000 per month by Q3 \u2014 a $2.2M\u2013$2.9M annualized ARR impact. Recommendation: deploy the CSM-led \u201c60-day activation sprint\u201d playbook to the 47 Business accounts in the January cohort showing <3 weekly active users.\n\nBlended gross margin came in at 84.8%, up 40bps sequentially and 20bps below the 85.0% plan. AI MRR now represents 2.7% of total revenue, up from 2.3% in January, with AI gross margin flat at 63% \u2014 inference costs scaled linearly with volume, confirming no unit economics improvement yet. At current trajectory, AI mix reaches 5% by August 2025; at that threshold, every 100bps of AI margin compression reduces blended margin by 5bps. Monitor inference cost per credit weekly; target $0.0018 by Q3 through volume commitments with the hyperscaler.";
-
-  var systemPrompt = "You are the VP of FP&A at a high-growth PLG SaaS company preparing the monthly revenue commentary for the CFO\u2019s board deck. Your analysis must be:\n\n1. CAUSAL, NOT DESCRIPTIVE: Don\u2019t just say \u201cMRR beat plan.\u201d Explain the mechanism: which cohort, which tier, which motion (new logo vs. expansion vs. upgrade) drove the variance, and WHY it happened.\n\n2. QUANTIFIED SECOND-ORDER EFFECTS: Every risk must include a dollar or basis-point impact estimate.\n\n3. SEGMENT-AWARE: Break down performance by tier (Team/Business/Enterprise) and motion (new logo/expansion/churn).\n\n4. FORWARD-LOOKING WITH SCENARIOS: Close with one specific action item and its expected impact.\n\nStructure: Three paragraphs. Under 300 words total.\n- P1: Headline result vs. plan \u2192 primary driver \u2192 the \u201cso what\u201d\n- P2: Growth decomposition by motion \u2192 segment-level hero and risk \u2192 quantified forward impact\n- P3: Margin trajectory \u2192 AI monetization economics \u2192 specific recommendation";
-
-  var userPrompt = "Plan MRR: $41,100,000 | Actual MRR: $42,380,000 (3.1% vs plan)\nPlan ARR: $493,200,000 | Actual ARR: $508,560,000\nAI MRR: $1,145,000 (2.7% of total)\nBlended Gross Margin: 84.8% (plan: 85.0%)";
+  var narrative = "Airtable\u2019s February MRR closed at $42,380,000, beating the $41,100,000 plan by 3.1% ($1,280,000 absolute). The beat was concentrated in two sources: an Enterprise deal that slipped from January\u2019s pipeline closing in the first week of February ($131,750 incremental MRR, representing 10.3% of the total variance), and AI credit monetization which contributed $165,000 above plan. The remaining $983,250 of upside came from broad-based new logo conversion running 10bps above the 4.0% plan \u2014 a signal that the September product refresh is sustaining its conversion lift into month five.\n\nGrowth decomposition reveals a bifurcated story. New logo MRR ($1,720,000) and AI MRR ($1,145,000, +16.8% vs. plan) are the heroes \u2014 AI adoption hit 36.2% of paid users versus the 30% plan, driven by the Airtable AI automation launch gaining organic traction. The risk sits in Business tier seat expansion, which decelerated to 3.8% monthly in January from the 5.0% plan assumption, concentrated in sub-6-month cohorts. This is an activation quality issue, not a product-market fit problem: Enterprise seat expansion held at 7.9% (vs. 8.0% plan). If Business expansion doesn\u2019t recover to 4.5%+ by April, trailing NRR will compress approximately 300bps, reducing expansion MRR by $180,000\u2013$240,000 per month by Q3 \u2014 a $2.2M\u2013$2.9M annualized ARR impact. Recommendation: deploy the CSM-led \u201c60-day activation sprint\u201d playbook to the 47 Business accounts in the January cohort showing <3 weekly active users.\n\nBlended gross margin came in at 84.8%, up 40bps sequentially and 20bps below the 85.0% plan. AI MRR now represents 2.7% of total revenue, up from 2.3% in January, with AI gross margin flat at 63% \u2014 inference costs scaled linearly with volume, confirming no unit economics improvement yet. At current trajectory, AI mix reaches 5% by August 2025; at that threshold, every 100bps of AI margin compression reduces blended margin by 5... [truncated, 2262 chars]";
 
   var paragraphs = narrative.split('\n\n');
 
@@ -1628,40 +1623,7 @@ function NarrativesPage() {
         </div>
       </div>
 
-      <div className="chart-grid">
-        <div className="card">
-          <div className="card-header">
-            <div>
-              <div className="card-title">System Prompt</div>
-              <div className="card-subtitle">Instruction template for AI narrator</div>
-            </div>
-          </div>
-          <div className="prompt-block">${systemPrompt}</div>
-        </div>
 
-        <div className="card">
-          <div className="card-header">
-            <div>
-              <div className="card-title">User Prompt</div>
-              <div className="card-subtitle">Auto-generated from variance data (Feb 2025)</div>
-            </div>
-          </div>
-          <div className="prompt-block">${userPrompt}</div>
-        </div>
-      </div>
-
-      <div className="callout mt-16">
-        <div className="callout-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="16" x2="12" y2="12"/>
-            <line x1="12" y1="8" x2="12.01" y2="8"/>
-          </svg>
-        </div>
-        <div className="callout-text">
-          <strong>How It Works:</strong> This narrative is generated by Claude API using the system prompt above combined with real-time variance data piped from the calculation engine. The prompt automatically ingests plan-vs-actual MRR, tier-level expansion rates, cohort retention curves, and AI monetization metrics \u2014 then generates board-ready commentary with causal analysis, quantified risk estimates, and actionable recommendations. In production, this runs on each monthly close and delivers CFO-ready commentary in under 5 seconds.
-        </div>
-      </div>
     </div>
   `;
 }
