@@ -726,23 +726,26 @@ function OverviewPage(props) {
               <div className="card-subtitle">Total MRR \u2014 Month 1</div>
             </div>
           </div>
-          <${ResponsiveContainer} width="100%" height=${280}>
-            <${PieChart}>
-              <${Pie}
-                data=${donutData}
-                cx="50%" cy="50%"
-                innerRadius=${70} outerRadius=${110}
-                paddingAngle=${2}
-                dataKey="value"
-              >
-                ${donutData.map(function(d, i) { return html`<${Cell} key=${i} fill=${d.fill} />`; })}
-              </${Pie}>
-              <${Tooltip} formatter=${fmtDollar} />
-              <${Legend} />
-            </${PieChart}>
-          </${ResponsiveContainer}>
-          <div style=${{ textAlign: 'center', fontSize: '13px', color: '#6B7280', marginTop: '-8px' }}>
-            Total: <strong style=${{ color: '#1F2937' }}>${fmtDollar(donutTotal)}</strong>
+          <div style=${{ position: 'relative' }}>
+            <${ResponsiveContainer} width="100%" height=${280}>
+              <${PieChart}>
+                <${Pie}
+                  data=${donutData}
+                  cx="50%" cy="50%"
+                  innerRadius=${70} outerRadius=${110}
+                  paddingAngle=${2}
+                  dataKey="value"
+                >
+                  ${donutData.map(function(d, i) { return html`<${Cell} key=${i} fill=${d.fill} />`; })}
+                </${Pie}>
+                <${Tooltip} formatter=${fmtDollar} />
+                <${Legend} />
+              </${PieChart}>
+            </${ResponsiveContainer}>
+            <div style=${{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+              <div style=${{ fontSize: '11px', color: '#9CA3AF', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total MRR</div>
+              <div style=${{ fontSize: '20px', fontWeight: 700, color: '#1F2937', fontVariantNumeric: 'tabular-nums', marginTop: '2px' }}>${fmtDollar(donutTotal)}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1046,7 +1049,7 @@ function SimulatorPage() {
         </div>
 
         <div className="slider-group">
-          <div className="slider-group-title">AI Economics</div>
+          <div className="slider-group-title">AI Monetization</div>
           <${SliderRow} label="AI Adoption" value=${params.aiCreditAdoptionRate} min=${0.05} max=${0.80} step=${0.05} onChange=${function(v) { updateParam('aiCreditAdoptionRate', v); }} format=${function(v) { return fmtPctDisplay(v * 100); }} />
           <${SliderRow} label="AI Rev/User" value=${params.aiRevenuePerActiveUser} min=${0.50} max=${10} step=${0.25} onChange=${function(v) { updateParam('aiRevenuePerActiveUser', v); }} format=${function(v) { return '$' + v.toFixed(2); }} />
           <${SliderRow} label="Inference Cost" value=${params.aiInferenceCostPerCredit} min=${0.0005} max=${0.005} step=${0.0001} onChange=${function(v) { updateParam('aiInferenceCostPerCredit', v); }} format=${function(v) { return '$' + v.toFixed(4); }} />
@@ -1402,7 +1405,7 @@ function VariancePage() {
 // PAGE 6: AI NARRATIVES
 // ============================================================
 function NarrativesPage() {
-  var narrative = "Airtable\u2019s February MRR closed at $42,380,000, beating the $41,100,000 plan by 3.1% ($1,280,000 absolute). The beat was concentrated in two sources: an Enterprise deal that slipped from January\u2019s pipeline closing in the first week of February ($131,750 incremental MRR, representing 10.3% of the total variance), and AI credit monetization which contributed $165,000 above plan. The remaining $983,250 of upside came from broad-based new logo conversion running 10bps above the 4.0% plan \u2014 a signal that the September product refresh is sustaining its conversion lift into month five.\n\nGrowth decomposition reveals a bifurcated story. New logo MRR ($1,720,000) and AI MRR ($1,145,000, +16.8% vs. plan) are the heroes \u2014 AI adoption hit 36.2% of paid users versus the 30% plan, driven by the Airtable AI automation launch gaining organic traction. The risk sits in Business tier seat expansion, which decelerated to 3.8% monthly in January from the 5.0% plan assumption, concentrated in sub-6-month cohorts. This is an activation quality issue, not a product-market fit problem: Enterprise seat expansion held at 7.9% (vs. 8.0% plan). If Business expansion doesn\u2019t recover to 4.5%+ by April, trailing NRR will compress approximately 300bps, reducing expansion MRR by $180,000\u2013$240,000 per month by Q3 \u2014 a $2.2M\u2013$2.9M annualized ARR impact. Recommendation: deploy the CSM-led \u201c60-day activation sprint\u201d playbook to the 47 Business accounts in the January cohort showing <3 weekly active users.\n\nBlended gross margin came in at 84.8%, up 40bps sequentially and 20bps below the 85.0% plan. AI MRR now represents 2.7% of total revenue, up from 2.3% in January, with AI gross margin flat at 63% \u2014 inference costs scaled linearly with volume, confirming no unit economics improvement yet. At current trajectory, AI mix reaches 5% by August 2025; at that threshold, every 100bps of AI margin compression reduces blended margin by 5bps. Recommendation: accelerate the inference caching initiative (currently in eng sprint 3) to target 15% cost reduction by June, which would add approximately $85,000\u2013$110,000 in monthly gross profit at projected AI MRR levels.";
+  var narrative = "Airtable\u2019s February MRR closed at $42,380,000, beating the $41,100,000 plan by 3.1% ($1,280,000 absolute). The beat was concentrated in two sources: an Enterprise deal that slipped from January\u2019s pipeline closing in the first week of February ($131,750 incremental MRR, representing 10.3% of the total variance), and AI credit monetization which contributed $165,000 above plan. The remaining $983,250 of upside came from broad-based new logo conversion running 10bps above the 4.0% plan \u2014 a signal that the September product refresh is sustaining its conversion lift into month five.\n\nGrowth decomposition reveals a bifurcated story. New logo MRR ($1,720,000) and AI MRR ($1,145,000, +16.8% vs. plan) are the heroes \u2014 AI adoption hit 36.2% of paid users versus the 30% plan, driven by the Airtable AI automation launch gaining organic traction. The risk sits in Business tier seat expansion, which decelerated to 3.8% monthly in January from the 5.0% plan assumption, concentrated in sub-6-month cohorts. This is an activation quality issue, not a product-market fit problem: Enterprise seat expansion held at 7.9% (vs. 8.0% plan). If Business expansion doesn\u2019t recover to 4.5%+ by April, trailing NRR will compress approximately 300bps, reducing expansion MRR by $180,000\u2013$240,000 per month by Q3 \u2014 a $2.2M\u2013$2.9M annualized ARR impact. Recommendation: deploy the CSM-led \u201c60-day activation sprint\u201d playbook to the 47 Business accounts in the January cohort showing <3 weekly active users.\n\nBlended gross margin came in at 84.8%, up 40bps sequentially and 20bps below the 85.0% plan. AI MRR now represents 2.7% of total revenue, up from 2.3% in January, with AI gross margin flat at 63% \u2014 inference costs scaled linearly with volume, confirming no unit economics improvement yet. At current trajectory, AI mix reaches 5% by August 2025; at that threshold, every 100bps of AI margin compression reduces blended margin by 5... [truncated, 2262 chars]";
 
   var systemPrompt = "You are the VP of FP&A at a high-growth PLG SaaS company preparing the monthly revenue commentary for the CFO\u2019s board deck. Your analysis must be:\n\n1. CAUSAL, NOT DESCRIPTIVE: Don\u2019t just say \u201cMRR beat plan.\u201d Explain the mechanism: which cohort, which tier, which motion (new logo vs. expansion vs. upgrade) drove the variance, and WHY it happened.\n\n2. QUANTIFIED SECOND-ORDER EFFECTS: Every risk must include a dollar or basis-point impact estimate.\n\n3. SEGMENT-AWARE: Break down performance by tier (Team/Business/Enterprise) and motion (new logo/expansion/churn).\n\n4. FORWARD-LOOKING WITH SCENARIOS: Close with one specific action item and its expected impact.\n\nStructure: Three paragraphs. Under 300 words total.\n- P1: Headline result vs. plan \u2192 primary driver \u2192 the \u201cso what\u201d\n- P2: Growth decomposition by motion \u2192 segment-level hero and risk \u2192 quantified forward impact\n- P3: Margin trajectory \u2192 AI monetization economics \u2192 specific recommendation";
 
